@@ -1,0 +1,188 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/hillside-labs/userservice/rpc/userapi";
+
+package userapi;
+
+
+service Users {
+  rpc Create (NewUser) returns (UserResponse) {}
+  rpc Get (UserRequest) returns (UserResponse) {}
+  rpc Update (UserRequest) returns (UserResponse) {}
+  rpc Find (UserQuery) returns (UserListResponse) {}
+  rpc Delete (UserRequest) returns (UserResponse) {}
+  rpc LogEvent (EventRequest) returns (EventResponse) {}
+  rpc SearchUserTraits(SearchUserTraitsRequest) returns (SearchUserTraitsResponse) {}
+  rpc GetUsersByTraits(SearchUserTraitsRequest) returns (UserListResponse) {}
+  rpc GetUsersByAggregatedTraits(GetUsersByAggregatedTraitsRequest) returns (UserListResponse) {}
+  rpc GetAggregateForUsers(GetAggregateForUsersRequest) returns (AggregateResponse) {}
+  rpc GetUsersByEvents(SearchUserEventsRequest) returns (UserListResponse) {}
+  rpc SearchEvents(SearchEventsRequest) returns (SearchEventsResponse) {}
+  rpc NaturalBreaks(NaturalBreaksRequest) returns (NaturalBreaksResponse) {}
+  rpc NaturalBreaksQueried(NaturalBreaksQueryRequest) returns (NaturalBreaksResponse) {}
+}
+
+message NewUser {
+  string username = 1;
+  string uuid = 2;
+  google.protobuf.Struct attributes = 5;
+  google.protobuf.Struct traits = 6;
+}
+
+message UserRequest {
+  uint64 id = 1;
+  string username = 2;
+  string uuid = 3;
+  google.protobuf.Struct attributes = 5;
+  google.protobuf.Struct traits = 6;
+}
+
+message UserResponse {
+  uint64 id = 1;
+  string uuid = 2;
+  string username = 3;
+  google.protobuf.Struct attributes = 5;
+  google.protobuf.Struct traits = 6;
+}
+
+message UserQuery {
+  int32 page_size = 1;
+  string page_token = 2;
+  string order_by = 3;
+  uint64 id = 4;
+  string username = 5;
+  string uuid = 6;
+  repeated AttributeFilter attributeFilters = 7;
+  repeated TraitFilter traitFilters = 8;
+}
+
+message UserListResponse {
+  repeated UserResponse users = 1;
+  string next_page_token = 2;
+}
+
+message EventRequest {
+  Event event = 1;
+}
+
+message EventResponse {
+  Event event = 1;
+}
+
+message Event {
+  string id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string source = 3;
+  string specversion = 4;
+  string type = 5;
+  string datacontenttype = 6;
+  string dataschema = 7;
+  string subject = 8;
+  bytes data = 9;
+  uint64 user_id = 10;
+}
+
+message UserID {
+  uint64 id = 1;
+  string uuid = 2; 
+}
+
+
+message SearchUserTraitsRequest {
+  UserID user_id = 1;
+  repeated string names = 2;
+  google.protobuf.Timestamp begin = 3;
+  google.protobuf.Timestamp end = 4;
+  int32 limit = 5;
+  bool latest = 6;
+}
+
+message GetUsersByAggregatedTraitsRequest {
+  string type = 1;
+  string name = 2;
+  string operator = 3;
+  float value = 4;
+  google.protobuf.Timestamp begin = 5;
+  google.protobuf.Timestamp end = 6;
+  int32 limit = 7;
+}
+
+message GetAggregateForUsersRequest {
+  repeated UserID user_ids = 1;
+  string type = 2;
+  string name = 3;
+}
+
+message AggregateResponse {
+  float value = 1;
+}
+
+message SearchUserEventsRequest {
+  repeated string types = 1;
+  repeated string subjects = 2;
+  repeated string sources = 3;
+  repeated string schemas = 4;
+  google.protobuf.Timestamp begin = 5;
+  google.protobuf.Timestamp end = 6;
+  int32 limit = 7;
+}
+
+message SearchUserTraitsResponse {
+  repeated google.protobuf.Struct traits = 1;
+}
+
+message SearchEventsRequest {
+  UserID user_id = 1;
+  repeated string names = 2;
+  google.protobuf.Timestamp begin = 3;
+  google.protobuf.Timestamp end = 4;
+  int32 limit = 5;
+}
+
+message SearchEventsResponse {
+  repeated Event events = 1;
+}
+
+message NaturalBreaksQueryRequest {
+  string name = 1;
+  uint32 breaks = 2;
+  google.protobuf.Timestamp begin = 3;
+  google.protobuf.Timestamp end = 4;
+}
+
+message NaturalBreaksRequest {
+  repeated double values = 1;
+  uint32 breaks = 2;
+}
+
+message NaturalBreaksResponse {
+  repeated double breaks = 1;
+}
+
+message AttributeFilter {
+  string name = 1;
+  Operator operator = 2;
+  google.protobuf.Value value = 3;
+}
+
+message TraitFilter {
+  string name = 1;
+  Operator operator = 2;
+  google.protobuf.Value value = 3;
+}
+
+enum Operator {
+  EQUALS = 0;
+  NOT_EQUALS = 1;
+  GREATER_THAN = 2;
+  GREATER_THAN_OR_EQUALS = 3;
+  LESS_THAN = 4;
+  LESS_THAN_OR_EQUALS = 5;
+  IN = 6;
+  NOT_IN = 7;
+  CONTAINS = 8;
+  NOT_CONTAINS = 9;
+}
