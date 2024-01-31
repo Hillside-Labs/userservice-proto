@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/hillside-labs/userservice-proto/main";
+option go_package = "github.com/hillside-labs/userservice-proto/userapi";
 
 package userapi;
 
