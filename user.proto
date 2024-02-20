@@ -15,6 +15,10 @@ service Users {
   rpc Find (UserQuery) returns (UserListResponse) {}
   rpc Delete (UserRequest) returns (UserResponse) {}
   rpc LogEvent (EventRequest) returns (EventResponse) {}
+  rpc AddAttribute (AttributeRequest) returns (AttributeResponse) {}
+  rpc AddTrait (TraitRequest) returns (TraitResponse) {}
+  rpc DeleteAttribute (AttributeRequest) returns (AttributeResponse) {}
+  rpc DeleteTrait (TraitRequest) returns (TraitResponse) {}
   rpc SearchUserTraits(SearchUserTraitsRequest) returns (SearchUserTraitsResponse) {}
   rpc GetUsersByTraits(SearchUserTraitsRequest) returns (UserListResponse) {}
   rpc GetUsersByAggregatedTraits(GetUsersByAggregatedTraitsRequest) returns (UserListResponse) {}
@@ -23,6 +27,10 @@ service Users {
   rpc SearchEvents(SearchEventsRequest) returns (SearchEventsResponse) {}
   rpc NaturalBreaks(NaturalBreaksRequest) returns (NaturalBreaksResponse) {}
   rpc NaturalBreaksQueried(NaturalBreaksQueryRequest) returns (NaturalBreaksResponse) {}
+  rpc QueryUsers (QueryRequest) returns (UserListResponse) {}
+  rpc QueryAttributes (QueryRequest) returns (AttributeListResponse) {}
+  rpc QueryTraits (QueryRequest) returns (TraitListResponse) {}
+  rpc QueryEvents (QueryRequest) returns (SearchEventsResponse) {}
 }
 
 message NewUser {
@@ -61,6 +69,39 @@ message UserQuery {
 
 message UserListResponse {
   repeated UserResponse users = 1;
+  string next_page_token = 2;
+}
+
+message AttributeRequest {
+  uint64 user_id = 1;
+  string key = 2;
+  google.protobuf.Value value = 3;
+}
+
+message AttributeResponse {
+}
+
+
+message TraitRequest {
+  uint64 user_id = 1;
+  string key = 2;
+  google.protobuf.Value value = 3;
+}
+
+message TraitResponse {}
+
+message AttributeListResponse {
+  google.protobuf.Struct attributes = 1;
+  string next_page_token = 2;
+}
+
+message TraitListResponse {
+  google.protobuf.Struct traits = 1;
+  string next_page_token = 2;
+}
+
+message EventListResponse {
+  google.protobuf.Struct events = 1;
   string next_page_token = 2;
 }
 
@@ -160,6 +201,10 @@ message NaturalBreaksRequest {
 
 message NaturalBreaksResponse {
   repeated double breaks = 1;
+}
+
+message QueryRequest {
+  bytes query = 1;
 }
 
 message AttributeFilter {
