@@ -100,11 +100,6 @@ message TraitListResponse {
   string next_page_token = 2;
 }
 
-message EventListResponse {
-  google.protobuf.Struct events = 1;
-  string next_page_token = 2;
-}
-
 message EventRequest {
   Event event = 1;
 }
