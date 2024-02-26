@@ -31,6 +31,8 @@ service Users {
   rpc QueryAttributes (QueryRequest) returns (AttributeListResponse) {}
   rpc QueryTraits (QueryRequest) returns (TraitListResponse) {}
   rpc QueryEvents (QueryRequest) returns (SearchEventsResponse) {}
+	rpc AddSession (SessionRequest) returns (SessionResponse) {}
+  rpc LogSessionEvent (SessionEventRequest) returns (SessionEventResponse) {}
 }
 
 message NewUser {
@@ -123,7 +125,7 @@ message Event {
 
 message UserID {
   uint64 id = 1;
-  string uuid = 2; 
+  string uuid = 2;
 }
 
 
@@ -213,6 +215,38 @@ message TraitFilter {
   Operator operator = 2;
   google.protobuf.Value value = 3;
 }
+
+message SessionRequest {
+	string id = 1;
+	google.protobuf.Struct object = 2;
+}
+
+message SessionResponse {
+	string id = 1;
+	google.protobuf.Struct object = 2;
+}
+
+message SessionEventRequest {
+  SessionEvent event = 1;
+}
+
+message SessionEventResponse {
+  SessionEvent event = 1;
+}
+
+message SessionEvent {
+  string session_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string source = 3;
+  string specversion = 4;
+  string type = 5;
+  string datacontenttype = 6;
+  string dataschema = 7;
+  string subject = 8;
+  bytes data = 9;
+  uint64 user_id = 10;
+}
+
 
 enum Operator {
   EQUALS = 0;
