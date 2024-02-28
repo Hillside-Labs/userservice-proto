@@ -31,7 +31,7 @@ service Users {
   rpc QueryAttributes (QueryRequest) returns (AttributeListResponse) {}
   rpc QueryTraits (QueryRequest) returns (TraitListResponse) {}
   rpc QueryEvents (QueryRequest) returns (SearchEventsResponse) {}
-	rpc AddSession (SessionRequest) returns (SessionResponse) {}
+  rpc AddSession (SessionRequest) returns (SessionResponse) {}
   rpc IdentifySession (IdentifySessionRequest) returns (IdentifySessionResponse) {}
   rpc GetSessions(GetSessionsRequest) returns (SessionListResponse) {}
   rpc LogSessionEvent (SessionEventRequest) returns (SessionEventResponse) {}
