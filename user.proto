@@ -31,8 +31,11 @@ service Users {
   rpc QueryAttributes (QueryRequest) returns (AttributeListResponse) {}
   rpc QueryTraits (QueryRequest) returns (TraitListResponse) {}
   rpc QueryEvents (QueryRequest) returns (SearchEventsResponse) {}
-	rpc AddSession (SessionRequest) returns (SessionResponse) {}
+  rpc AddSession (SessionRequest) returns (SessionResponse) {}
+  rpc IdentifySession (IdentifySessionRequest) returns (IdentifySessionResponse) {}
+  rpc GetSessions(GetSessionsRequest) returns (SessionListResponse) {}
   rpc LogSessionEvent (SessionEventRequest) returns (SessionEventResponse) {}
+  rpc GetSessionEvents(GetSessionEventsRequest) returns (SessionEventListResponse) {}
 }
 
 message NewUser {
@@ -217,13 +220,18 @@ message TraitFilter {
 }
 
 message SessionRequest {
-	string id = 1;
-	google.protobuf.Struct object = 2;
+	Session session = 1;
+}
+
+message Session {
+  string key = 1;
+  uint64 user_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+	google.protobuf.Struct object = 4;
 }
 
 message SessionResponse {
-	string id = 1;
-	google.protobuf.Struct object = 2;
+  Session session = 1;
 }
 
 message SessionEventRequest {
@@ -234,8 +242,44 @@ message SessionEventResponse {
   SessionEvent event = 1;
 }
 
+message IdentifySessionRequest {
+  repeated string session_key = 1;
+  uint64 user_id = 2;
+}
+
+message IdentifySessionResponse {
+}
+
+message GetSessionsRequest {  
+  repeated string session_keys = 1;
+  uint64 user_id = 2;
+  google.protobuf.Timestamp begin = 3;
+  google.protobuf.Timestamp end = 4;
+  int32 offset = 5;
+  int32 limit = 6;
+  string order_by = 7;
+}
+
+message SessionListResponse {
+  repeated Session Sessions = 1;
+}
+
+message GetSessionEventsRequest {
+  repeated string session_keys = 1;
+  uint64 user_id = 2;
+  google.protobuf.Timestamp begin = 3;
+  google.protobuf.Timestamp end = 4;
+  int32 offset = 5;
+  int32 limit = 6;
+  string order_by = 7;
+}
+
+message SessionEventListResponse {
+  repeated SessionEvent SessionEvents = 1;
+}
+
 message SessionEvent {
-  string session_id = 1;
+  string session_key = 1;
   google.protobuf.Timestamp timestamp = 2;
   string source = 3;
   string specversion = 4;
