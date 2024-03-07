@@ -35,7 +35,7 @@ service Users {
   rpc IdentifySession (IdentifySessionRequest) returns (IdentifySessionResponse) {}
   rpc GetSessions(GetSessionsRequest) returns (SessionListResponse) {}
   rpc LogSessionEvent (SessionEventRequest) returns (SessionEventResponse) {}
-  rpc GetSessionEvents(GetSessionEventsRequest) returns (SessionEventListResponse) {}
+  rpc GetSessionEvents(GetSessionEventsRequest) returns (EventListResponse) {}
 }
 
 message NewUser {
@@ -124,6 +124,7 @@ message Event {
   string subject = 8;
   bytes data = 9;
   uint64 user_id = 10;
+  string session_key = 11;
 }
 
 message UserID {
@@ -235,11 +236,11 @@ message SessionResponse {
 }
 
 message SessionEventRequest {
-  SessionEvent event = 1;
+  Event event = 1;
 }
 
 message SessionEventResponse {
-  SessionEvent event = 1;
+  Event event = 1;
 }
 
 message IdentifySessionRequest {
@@ -274,23 +275,9 @@ message GetSessionEventsRequest {
   string order_by = 7;
 }
 
-message SessionEventListResponse {
-  repeated SessionEvent SessionEvents = 1;
+message EventListResponse {
+  repeated Event Events = 1;
 }
-
-message SessionEvent {
-  string session_key = 1;
-  google.protobuf.Timestamp timestamp = 2;
-  string source = 3;
-  string specversion = 4;
-  string type = 5;
-  string datacontenttype = 6;
-  string dataschema = 7;
-  string subject = 8;
-  bytes data = 9;
-  uint64 user_id = 10;
-}
-
 
 enum Operator {
   EQUALS = 0;
