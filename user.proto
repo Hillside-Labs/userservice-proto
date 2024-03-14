@@ -38,38 +38,42 @@ service Users {
   rpc GetSessionEvents(GetSessionEventsRequest) returns (EventListResponse) {}
 }
 
+message UserID {
+  uint64 id = 1;
+  string uuid = 2;
+  string external_id = 3;
+}
+
 message NewUser {
   string username = 1;
   string uuid = 2;
-  google.protobuf.Struct attributes = 5;
-  google.protobuf.Struct traits = 6;
+  string external_id = 3;
+  google.protobuf.Struct attributes = 4;
+  google.protobuf.Struct traits = 5;
 }
 
 message UserRequest {
-  uint64 id = 1;
+  UserID id = 1;
   string username = 2;
-  string uuid = 3;
-  google.protobuf.Struct attributes = 5;
-  google.protobuf.Struct traits = 6;
+  google.protobuf.Struct attributes = 3;
+  google.protobuf.Struct traits = 4;
 }
 
 message UserResponse {
-  uint64 id = 1;
-  string uuid = 2;
-  string username = 3;
-  google.protobuf.Struct attributes = 5;
-  google.protobuf.Struct traits = 6;
+  UserID id = 1;
+  string username = 2;
+  google.protobuf.Struct attributes = 3;
+  google.protobuf.Struct traits = 4;
 }
 
 message UserQuery {
   int32 page_size = 1;
   string page_token = 2;
   string order_by = 3;
-  uint64 id = 4;
+  UserID user_id = 4;
   string username = 5;
-  string uuid = 6;
-  repeated AttributeFilter attributeFilters = 7;
-  repeated TraitFilter traitFilters = 8;
+  repeated AttributeFilter attributeFilters = 6;
+  repeated TraitFilter traitFilters = 7;
 }
 
 message UserListResponse {
@@ -78,7 +82,7 @@ message UserListResponse {
 }
 
 message AttributeRequest {
-  uint64 user_id = 1;
+  UserID user_id = 1;
   string key = 2;
   google.protobuf.Value value = 3;
 }
@@ -88,7 +92,7 @@ message AttributeResponse {
 
 
 message TraitRequest {
-  uint64 user_id = 1;
+  UserID user_id = 1;
   string key = 2;
   google.protobuf.Value value = 3;
 }
@@ -123,19 +127,14 @@ message Event {
   string dataschema = 7;
   string subject = 8;
   bytes data = 9;
-  uint64 user_id = 10;
+  UserID user_id = 10;
   string session_key = 11;
-}
-
-message UserID {
-  uint64 id = 1;
-  string uuid = 2;
 }
 
 
 message SearchUserTraitsRequest {
   UserID user_id = 1;
-  repeated string names = 2;
+  repeated string names = 32;
   google.protobuf.Timestamp begin = 3;
   google.protobuf.Timestamp end = 4;
   int32 limit = 5;
@@ -226,7 +225,7 @@ message SessionRequest {
 
 message Session {
   string key = 1;
-  uint64 user_id = 2;
+  UserID user_id = 2;
   google.protobuf.Timestamp timestamp = 3;
 	google.protobuf.Struct object = 4;
 }
@@ -245,7 +244,7 @@ message SessionEventResponse {
 
 message IdentifySessionRequest {
   repeated string session_key = 1;
-  uint64 user_id = 2;
+  UserID user_id = 2;
 }
 
 message IdentifySessionResponse {
@@ -253,7 +252,7 @@ message IdentifySessionResponse {
 
 message GetSessionsRequest {  
   repeated string session_keys = 1;
-  uint64 user_id = 2;
+  UserID user_id = 2;
   google.protobuf.Timestamp begin = 3;
   google.protobuf.Timestamp end = 4;
   int32 offset = 5;
@@ -267,7 +266,7 @@ message SessionListResponse {
 
 message GetSessionEventsRequest {
   repeated string session_keys = 1;
-  uint64 user_id = 2;
+  UserID user_id = 2;
   google.protobuf.Timestamp begin = 3;
   google.protobuf.Timestamp end = 4;
   int32 offset = 5;
