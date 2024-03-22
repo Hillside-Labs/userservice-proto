@@ -315,7 +315,7 @@ message Integration {
     string ExecPath = 4;
     string ConfigPath = 5;
     bool Enabled = 6;
-    google.protobuf.Struct settings = 7;
+    google.protobuf.Struct Settings = 7;
 }
 
 message Job {
