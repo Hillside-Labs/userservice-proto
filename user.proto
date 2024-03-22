@@ -295,6 +295,7 @@ enum Operator {
 service Integrations {
     rpc ListIntegrations (IntegrationListRequest) returns (IntegrationListResponse) {}
     rpc AddIntegration (IntegrationAddRequest) returns (IntegrationAddResponse) {}
+    rpc UpdateIntegration (IntegrationUpdateRequest) returns (IntegrationUpdateResponse) {}
     rpc RemoveIntegration (IntegrationRemoveRequest) returns (IntegrationRemoveResponse) {}
     rpc JobUpdate (JobUpdateRequest) returns (JobUpdateResponse) {}
     rpc GetJobHistory (JobGetHistoryRequest) returns (JobGetHistoryResponse) {}
@@ -314,6 +315,7 @@ message Integration {
     string ExecPath = 4;
     string ConfigPath = 5;
     bool Enabled = 6;
+    google.protobuf.Struct settings = 7;
 }
 
 message Job {
@@ -336,6 +338,14 @@ message IntegrationAddRequest {
 }
 
 message IntegrationAddResponse{
+    Integration integration = 1;
+}
+
+message IntegrationUpdateRequest {
+    Integration integration = 1;
+}
+
+message IntegrationUpdateResponse{
     Integration integration = 1;
 }
 
