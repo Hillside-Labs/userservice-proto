@@ -293,38 +293,39 @@ enum Operator {
 
 
 service Integrations {
-    rpc ListIntegrations (IntegrationListRequest) returns (IntegrationListResponse) {}
-    rpc AddIntegration (IntegrationAddRequest) returns (IntegrationAddResponse) {}
-    rpc UpdateIntegration (IntegrationUpdateRequest) returns (IntegrationUpdateResponse) {}
-    rpc RemoveIntegration (IntegrationRemoveRequest) returns (IntegrationRemoveResponse) {}
-    rpc JobUpdate (JobUpdateRequest) returns (JobUpdateResponse) {}
-    rpc GetJobHistory (JobGetHistoryRequest) returns (JobGetHistoryResponse) {}
+  rpc ListIntegrations (IntegrationListRequest) returns (IntegrationListResponse) {}
+  rpc GetIntegration (IntegrationGetRequest) returns (IntegrationGetResponse) {}
+  rpc AddIntegration (IntegrationAddRequest) returns (IntegrationAddResponse) {}
+  rpc UpdateIntegration (IntegrationUpdateRequest) returns (IntegrationUpdateResponse) {}
+  rpc RemoveIntegration (IntegrationRemoveRequest) returns (IntegrationRemoveResponse) {}
+  rpc JobUpdate (JobUpdateRequest) returns (JobUpdateResponse) {}
+  rpc GetJobHistory (JobGetHistoryRequest) returns (JobGetHistoryResponse) {}
 }
 
 enum JobStatus {
-    SCHEDULED = 0;
-    STARTED = 1;
-    COMPLETE = 2;
-    ERROR = 3;
+  SCHEDULED = 0;
+  STARTED = 1;
+  COMPLETE = 2;
+  ERROR = 3;
 }
 
 message Integration {
-    int32 ID = 1;
-    string Name = 2;
-    string Schedule = 3;
-    string ExecPath = 4;
-    string ConfigPath = 5;
-    bool Enabled = 6;
-    google.protobuf.Struct Settings = 7;
+  int32 ID = 1;
+  string Name = 2;
+  string Schedule = 3;
+  string ExecPath = 4;
+  string ConfigPath = 5;
+  bool Enabled = 6;
+  google.protobuf.Struct Settings = 7;
 }
 
 message Job {
-    string IntegrationName = 1;
-    google.protobuf.Timestamp Started = 2;
-    google.protobuf.Timestamp Ended = 3;
-    JobStatus Status = 4;
-    string Error = 5;
-    int32 ID = 6;
+  string IntegrationName = 1;
+  google.protobuf.Timestamp Started = 2;
+  google.protobuf.Timestamp Ended = 3;
+  JobStatus Status = 4;
+  string Error = 5;
+  int32 ID = 6;
 }
 
 message IntegrationListRequest {}
@@ -333,24 +334,33 @@ message IntegrationListResponse{
   repeated Integration Integrations = 1;
 }
 
+message IntegrationGetRequest {
+  string Name = 1;
+  int32 ID = 2;
+}
+
+message IntegrationGetResponse {
+  Integration integration = 1;
+}
+
 message IntegrationAddRequest {
-    Integration integration = 1;
+  Integration integration = 1;
 }
 
 message IntegrationAddResponse{
-    Integration integration = 1;
+  Integration integration = 1;
 }
 
 message IntegrationUpdateRequest {
-    Integration integration = 1;
+  Integration integration = 1;
 }
 
 message IntegrationUpdateResponse{
-    Integration integration = 1;
+  Integration integration = 1;
 }
 
 message IntegrationRemoveRequest {
-    string Name = 1;
+  string Name = 1;
 }
  
 message IntegrationRemoveResponse {
